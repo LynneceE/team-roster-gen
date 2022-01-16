@@ -3,7 +3,7 @@ const inquirer = require('inquirer');
 const promptUser = () => {
     return inquirer.prompt ([
 
-                              // INTRO INFO //
+                              // INTRO DATA INPUT //
 
         {
             type: 'input',
@@ -66,4 +66,31 @@ const promptUser = () => {
     ]);
 };
 
-promptUser();
+                       
+                               // ADDING A NEW TEAM MEMBER //
+
+
+
+const promptTeam = () => {
+    console.log(`
+    =====================
+    Add a New Team Member
+    =====================
+    `);
+
+                               // GIVE USER OPTIONS TO ADD EITHER AN INTERN OR AN ENGINEER //
+    return inquirer.prompt([
+        {
+            type: 'checkbox',
+            name: 'members',
+            message: "Which member would you like to add? (Select only ONE)",
+            choices: ['Engineer', 'Intern', 'Finish building my team']
+        }
+
+
+
+
+    ]);
+};   
+
+promptUser().then(promptTeam);
