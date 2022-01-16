@@ -1,11 +1,14 @@
-const inquirer = require('inquirer');
+ const inquirer = require('inquirer');
+ const Engineer = require('./lib/Engineer');
+
+ 
 
 const promptUser = () => {
     return inquirer.prompt ([
 
                               // INTRO DATA INPUT //
 
-        {
+         {
             type: 'input',
             name: 'name',
             message: "What is the Team Manager's name? (Required)",
@@ -21,7 +24,7 @@ const promptUser = () => {
 
         {
             type: 'input',
-            name: 'ID',
+            name: 'id',
             message: "Please enter your Employee ID (Required)",
             validate: idInput => {
                 if (idInput) {
@@ -85,12 +88,15 @@ const promptTeam = () => {
             name: 'members',
             message: "Which member would you like to add? (Select only ONE)",
             choices: ['Engineer', 'Intern', 'Finish building my team']
-        }
-
-
-
+        },
 
     ]);
 };   
 
-promptUser().then(promptTeam);
+
+ 
+
+       
+    
+
+promptUser().then(promptTeam); 
