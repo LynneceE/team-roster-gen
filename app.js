@@ -1,102 +1,115 @@
+ // bringing in all files  for each member's input 
+ 
  const inquirer = require('inquirer');
- const Engineer = require('./lib/Engineer');
+ const Manager = require('./lib/Manager');
+ const generateRoster = require('./src/page-template');
+ const { writeFile, copyFile } = require('./utils/generate-site');
+
 
  
+                  // INITIATE QUESTIONS //
 
-const promptUser = () => {
-    return inquirer.prompt ([
+promptQuestions = () => {
+    return inquirer.prompt([
 
-                              // INTRO DATA INPUT //
-
-         {
+        {
             type: 'input',
             name: 'name',
-            message: "What is the Team Manager's name? (Required)",
-            validate: nameInput => {
-                if (nameInput) {
-                    return true;
-                } else {
-                    console.log("You must enter your Team Manager's name!");
-                    return false;
-                }
-            }
+            message: "What's your name?"
+        },
+
+        {
+            type: 'input',
+            name: 'email',
+            message: "What's your email address?"
         },
 
         {
             type: 'input',
             name: 'id',
-            message: "Please enter your Employee ID (Required)",
-            validate: idInput => {
-                if (idInput) {
-                    return true;
-                } else {
-                    console.log("You must enter your Employee ID!");
-                    return false;
-                }
-            }
-        },
-        
-        {
-            type: 'input',
-            name: 'email',
-            message: "Please enter your email address",
-            validate: emInput => {
-                if (emInput) {
-                    return true;
-                } else {
-                    console.log("You must enter an email address!");
-                    return false; 
-                }
-            }
+            message: "What's your Employee ID?"
         },
 
         {
             type: 'input',
-            name: 'office',
-            message: "Please enter your office number (Required)",
-            validate: offNum => {
-                if (offNum) {
-                    return true;
-                } else {
-                    console.log("You must enter your office number!");
-                    return false;
-                }
-            }
-
-            
+            name: 'office number',
+            message: "What's your office number?"
         }
+       
+    ]).then(({ answers }) => {
+        this.data = new Manager( err => {
+            if (err) {
+                reject(err);
+                return;
+            }
 
-    ]);
-};
+            resolve({
+                ok: true,
+                message: `${this.name} has been successfully added to your team!`
+            })
+        })
 
-                       
-                               // ADDING A NEW TEAM MEMBER //
+    });
+    
+}
 
-
-
-const promptTeam = () => {
+const promptRoster = rosterData => {
     console.log(`
     =====================
     Add a New Team Member
     =====================
     `);
 
-                               // GIVE USER OPTIONS TO ADD EITHER AN INTERN OR AN ENGINEER //
+    if(!rosterData.member) {
+        rosterData.member = [];
+    }
+
     return inquirer.prompt([
+
         {
-            type: 'checkbox',
-            name: 'members',
-            message: "Which member would you like to add? (Select only ONE)",
-            choices: ['Engineer', 'Intern', 'Finish building my team']
+            type: 'input',
+            name: 'name',
+            message: "What's your name?"
         },
 
-    ]);
-};   
+        {
+            type: 'input',
+            name: 'email',
+            message: "What's your email address?"
+        },
+
+        {
+            type: 'input',
+            name: 'id',
+            message: "What's your Employee ID?"
+        },
+
+        {
+            type: 'input',
+            name: 'office number',
+            message: "What's your office number?"
+        },
+
+        {
+            type: 'input',
+            name: 'username',
+            message: "What's your Github username?"
+        }
+        
+    ])
+    .then(rosterData => {
+        rosterData.member.push(rosterData);
+        if (rosterData.confirmAddMember) {
+            return promptRoster(rosterData);
+        } else {
+            return rosterData;
+        }
+    });
+};
 
 
+
+promptQuestions().then(promptRoster).catch(err => {
+    console.log(err);
+});
  
-
-       
-    
-
-promptUser().then(promptTeam); 
